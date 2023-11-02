@@ -20,12 +20,27 @@ public class TerrainGenerator : MonoBehaviour
 
     private void Generate()
     {
-        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
         mesh.name = "Procedural Sphere";
         CreateVertices();
         CreateTriangles();
         CreateColliders();
         RecalculateUVs();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (vertices == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(transform.TransformPoint(vertices[i]), 0.1f);
+        }
     }
 
     private void CreateColliders()
@@ -58,8 +73,8 @@ public class TerrainGenerator : MonoBehaviour
             (resolution - 1) * (resolution - 1)) * 2;
 
         vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
-        normals = new Vector3[cornerVertices + edgeVertices + faceVertices];
-        cubeUV = new Color32[cornerVertices + edgeVertices + faceVertices];
+        normals = new Vector3[vertices.Length];
+        cubeUV = new Color32[vertices.Length];
 
         int v = 0;
 
@@ -69,14 +84,17 @@ public class TerrainGenerator : MonoBehaviour
             {
                 SetVertex(v++, x, y, 0);
             }
+
             for (int z = 1; z <= resolution; z++)
             {
                 SetVertex(v++, resolution, y, z);
             }
+            
             for (int x = resolution - 1; x >= 0; x--)
             {
                 SetVertex(v++, x, y, resolution);
             }
+            
             for (int z = resolution - 1; z > 0; z--)
             {
                 SetVertex(v++, 0, y, z);
@@ -213,18 +231,31 @@ public class TerrainGenerator : MonoBehaviour
 
         return t;
     }
-    
+
     private void RecalculateUVs()
     {
         //calculate normalized uv map following the traingles order
 
         Vector2[] uvs = new Vector2[vertices.Length];
+        Vector2 minUv = new Vector2(99f, 99f);
+        Vector2 maxUv = new Vector2(-99f, -99f);
 
         for (int i = 0; i < vertices.Length; i++)
         {
-            uvs[i] = PointToCoordinate(vertices[i]);
+            Vector2 aux = PointToCoordinate(vertices[i]);
+            minUv = Vector2.Min(minUv, aux);
+            maxUv = Vector2.Max(maxUv, aux);
+            uvs[i] = aux;
         }
-        
+
+        //normlize the uvs:
+
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i].x = (uvs[i].x - minUv.x) / (maxUv.x - minUv.x);
+            uvs[i].y = (uvs[i].y - minUv.y) / (maxUv.y - minUv.y);
+        }
+
         mesh.uv = uvs;
     }
 
@@ -239,5 +270,4 @@ public class TerrainGenerator : MonoBehaviour
 
         return coord;
     }
-
 }

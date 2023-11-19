@@ -5,24 +5,58 @@ using UnityEngine;
 public class CountryController : MonoBehaviour
 {
     private Transform parent;
+    private Material countryMaterial;
     private LineRenderer countryLine;
+    private BoxCollider countryCollider;
+    [SerializeField]
+    private float fadeSpeed = 0.01f;
 
     // Start is called before the first frame update
     void Start()
     {
-        parent = transform.parent;
+        countryCollider = GetComponent<BoxCollider>();
+        countryCollider.isTrigger = true;
         countryLine = GetComponent<LineRenderer>();
-        //RotateCountryLine();
+        countryLine.material.color = new Color(1, 1, 1, 0);
+    } 
+
+    //line renderer only visible if its colliding with player
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            StartCoroutine(FadeIn());
+        }
     }
 
-    private void RotateCountryLine()
+    private void OnTriggerExit(Collider other)
     {
-        Vector3[] positions = new Vector3[countryLine.positionCount];
-        countryLine.GetPositions(positions);
-        for (int i = 0; i < positions.Length; i++)
+        if (other.gameObject.tag == "Player")
         {
-            positions[i] = parent.InverseTransformPoint(positions[i]);
+            StartCoroutine(FadeOut());
         }
-        countryLine.SetPositions(positions);
+    }
+
+    // fade function using coroutine
+    IEnumerator FadeOut()
+    {
+        for (float f = 1f; f >= 0; f -= fadeSpeed)
+        {
+            Color c = countryLine.material.color;
+            c.a = f;
+            countryLine.material.color = c;
+            yield return new WaitForSeconds(fadeSpeed);
+        }
+    }
+
+    IEnumerator FadeIn()
+    {
+        for (float f = 0f; f <= 1; f += fadeSpeed)
+        {
+            Color c = countryLine.material.color;
+            c.a = f;
+            countryLine.material.color = c;
+            yield return new WaitForSeconds(fadeSpeed);
+        }
     }
 }

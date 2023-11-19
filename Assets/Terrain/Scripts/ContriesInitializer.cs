@@ -11,7 +11,7 @@ namespace Assets.Terrain
         internal struct Country
         {
             public string name;
-            public Vector2[] polygon;
+            public List<List<Vector2>> polygons;
         }
 
         Country[] countries;
@@ -42,10 +42,21 @@ namespace Assets.Terrain
             for (int i = 0; i < jsonCountries.features.Count; i++)
             {
                 countries[i].name = jsonCountries.features[i].properties.NAME_LONG;
-                countries[i].polygon = new Vector2[jsonCountries.features[i].geometry.coordinates[0][0].Count];
-                for (int j = 0; j < jsonCountries.features[i].geometry.coordinates[0][0].Count; j++)
+                countries[i].polygons = new List<List<Vector2>>();
+
+                foreach (List<List<double[]>> polygons in jsonCountries.features[i].geometry.coordinates)
                 {
-                    countries[i].polygon[j] = new Vector2((float)jsonCountries.features[i].geometry.coordinates[0][0][j][0], (float)jsonCountries.features[i].geometry.coordinates[0][0][j][1]);
+                    List<Vector2> polygon = new List<Vector2>();
+
+                    foreach (List<double[]> points in polygons)
+                    {
+                        foreach (double[] point in points)
+                        {
+                            polygon.Add(new Vector2((float)point[0], (float)point[1]));
+                        }
+                    }
+
+                    countries[i].polygons.Add(polygon);
                 }
             }
         }
@@ -62,17 +73,22 @@ namespace Assets.Terrain
 
         private void CreateCountry(int index)
         {
-            GameObject country = Instantiate(countryPrefab);
-            country.transform.SetParent(this.transform);
-            lines = country.GetComponent<LineRenderer>();
-            int size = countries[index].polygon.Count(); ;
-            lines.positionCount = size;
-
-            for (int i = 0; i < size; i++)
+            foreach(List<Vector2> polygon in countries[index].polygons)
             {
-                Vector2 lonLat = countries[index].polygon[i];
-                Vector3 worldSpace = LonLatToPoint(earthCenter, lonLat, earthRadius);
-                lines.SetPosition(i, worldSpace);
+                GameObject go = Instantiate(countryPrefab, transform);
+                go.name = countries[index].name;
+
+                Vector3[] points = new Vector3[polygon.Count];
+
+                for(int i = 0; i < polygon.Count; i++)
+                {
+                    points[i] = LonLatToPoint(earthCenter, polygon[i], earthRadius);
+                }
+
+                LineRenderer lr = go.GetComponent<LineRenderer>();
+                lr.positionCount = points.Length;
+                lr.SetPositions(points);
+                go.AddComponent<BoxCollider>();
             }
         }
 

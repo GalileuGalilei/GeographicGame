@@ -26,8 +26,7 @@ namespace Assets.Terrain
         [SerializeField]
         private GameObject countryPrefab;
 
-        // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             string json = System.IO.File.ReadAllText(shapePath);
             JsonCountries jsonContries = JsonConvert.DeserializeObject<JsonCountries>(json);
@@ -36,6 +35,14 @@ namespace Assets.Terrain
             CreateAllCountries();
             Debug.Log("Countries initialized");
         }
+
+        public string[] GetCountryNames()
+        {
+            string[] country_array = countries.Select(c => c.name).ToArray();
+            return country_array.Distinct().ToArray();
+        }
+
+
 
         private void JsonToVector(JsonCountries jsonCountries)
         {
@@ -77,6 +84,7 @@ namespace Assets.Terrain
             {
                 GameObject go = Instantiate(countryPrefab, transform);
                 go.name = countries[index].name;
+                go.tag = "Country";
 
                 Vector3[] points = new Vector3[polygon.Count];
 

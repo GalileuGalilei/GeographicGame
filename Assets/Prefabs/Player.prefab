@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2181520873440741518}
   - component: {fileID: 8525165264255480680}
   - component: {fileID: 4227937765156455375}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4352781928257215366}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CameraPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,9 +150,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3435685551491223344}
     m_Modifications:
+    - target: {fileID: 1824354609013801635, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819777036250117, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2020822082516495889, guid: b29e57bcd0033454fb064629676137c3, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983511415428430053, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4110074437274207931, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395457209764941518, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4427597759779831064, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5180858929285816000, guid: b29e57bcd0033454fb064629676137c3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -197,6 +221,10 @@ PrefabInstance:
     - target: {fileID: 5525295603368428666, guid: b29e57bcd0033454fb064629676137c3, type: 3}
       propertyPath: m_Name
       value: ComPlaneV1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525295603368428666, guid: b29e57bcd0033454fb064629676137c3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

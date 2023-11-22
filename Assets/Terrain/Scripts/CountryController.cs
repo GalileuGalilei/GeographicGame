@@ -5,15 +5,20 @@ using UnityEngine;
 public class CountryController : MonoBehaviour
 {
     private Transform parent;
+    private GameObject player;
     private Material countryMaterial;
     private LineRenderer countryLine;
     private BoxCollider countryCollider;
+
+    [SerializeField]
+    private bool dynamicCollision = false;
     [SerializeField]
     private float fadeSpeed = 0.01f;
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Player");
         countryCollider = GetComponent<BoxCollider>();
         countryCollider.isTrigger = true;
         countryLine = GetComponent<LineRenderer>();

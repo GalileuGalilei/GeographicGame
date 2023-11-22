@@ -9,52 +9,46 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 100f;
     [SerializeField] private float turboRotationSpeed = 200f;
 
-    private Vector3 moveDir;
-    private Rigidbody rb;
-    private float horizontal;
-    private float vertical;
-    private float speed;
-    private float rotationSpd;
+    private Vector3 speed;
+    private Vector3 rotation;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        speed = moveSpeed;
-        rotationSpd = rotationSpeed;
-    }
-
+    // Update is called once per frame
     void Update()
     {
-        GetInput();
+        speed = Vector3.zero;
+        rotation = Vector3.zero;
 
-        moveDir = new Vector3(horizontal, 0f, vertical).normalized;
-
-        float rotationAmount = horizontal * rotationSpd * Time.deltaTime;
-        Quaternion deltaRotation = Quaternion.Euler(0f, rotationAmount, 0f);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-    }
-
-    void GetInput()
-    {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-
-        if(Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.W))
         {
-            speed = turboSpeed;
-            rotationSpd = turboRotationSpeed;
+            speed += transform.forward * moveSpeed;
         }
-        else
+
+        if (Input.GetKey(KeyCode.S))
         {
-            speed = moveSpeed;
-            rotationSpd = rotationSpeed;
-        }   
+            speed -= transform.forward * moveSpeed;
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            rotation -= transform.up * rotationSpeed;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            rotation += transform.up * rotationSpeed;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed *= turboSpeed;
+            rotation *= turboRotationSpeed;
+        }
+
+        transform.Translate(speed * Time.deltaTime, Space.World);
+        transform.Rotate(rotation * Time.deltaTime);
     }
 
-    private void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + transform.TransformDirection(moveDir) * speed * Time.fixedDeltaTime);
-    }
+    
 
 
 }

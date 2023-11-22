@@ -13,7 +13,6 @@ public class DropPackage : MonoBehaviour
     private float lastDropTime = 0f;
     private string[] countries;
     public string objectiveCountry;
-    public TMP_Text objectiveText;
 
     private void Start()
     {
@@ -40,7 +39,7 @@ public class DropPackage : MonoBehaviour
         var random = new System.Random();
         int index = random.Next(countries.Length);
         objectiveCountry = countries[index];
-        objectiveText.text = "Objetivo Atual: " + objectiveCountry;
+        FindAnyObjectByType<GameStats>().NewObjective(objectiveCountry);
     }
 
     void InstantiatePrefab()

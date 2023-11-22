@@ -6,28 +6,20 @@ public class RecievePackage : MonoBehaviour
 {
     public GameObject player;
     private string objectiveCountry;
+    private List<string> countriesCollided;
 
-    // Start is called before the first frame update
     void Start()
     {
         objectiveCountry = player.GetComponent<DropPackage>().objectiveCountry;
+        countriesCollided = new List<string>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.transform.tag == "Country")
         {
-            if(other.transform.name == objectiveCountry)
-            {
-                Debug.Log("Package delivered");
-                player.GetComponent<DropPackage>().GenNewObjective();
-            }
-            else
-            {
-                Debug.Log("Wrong country");
-            }
+            countriesCollided.Add(other.transform.name);
 
-            Destroy(gameObject, 1f);
         }
     }
 
@@ -35,8 +27,23 @@ public class RecievePackage : MonoBehaviour
     {
         if(collision.transform.tag == "Planet")
         {
-            Debug.Log("Package destroyed");
-            Destroy(gameObject);
+            Destroy(gameObject, 1f);
+            VerifyCountriesCollided();
         }
+    }
+
+    private void VerifyCountriesCollided()
+    {
+        if (countriesCollided.Contains(objectiveCountry))
+        {
+            FindAnyObjectByType<GameStats>().CorrectCountry();
+            player.GetComponent<DropPackage>().GenNewObjective();
+        }
+        else
+        {
+            FindAnyObjectByType<GameStats>().WrongCountry();
+        }
+
+        countriesCollided.Clear();
     }
 }

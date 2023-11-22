@@ -49,6 +49,12 @@ public class PlayerController : MonoBehaviour
             speed = moveSpeed;
             rotationSpd = rotationSpeed;
         }   
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            FindAnyObjectByType<GameStats>().SkipCountry();
+            FindAnyObjectByType<DropPackage> ().GenNewObjective();
+        }
     }
 
     private void FixedUpdate()

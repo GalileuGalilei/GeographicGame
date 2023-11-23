@@ -44,6 +44,13 @@ public class PlayerController : MonoBehaviour
             rotation *= turboRotationSpeed;
         }
 
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            FindAnyObjectByType<GameStats>().SkipCountry();
+            FindAnyObjectByType<DropPackage>().GenNewObjective();
+            FindAnyObjectByType<AudioManager>().PlaySoundEffectWrong();
+        }
+
         transform.Translate(speed * Time.deltaTime, Space.World);
         transform.Rotate(rotation * Time.deltaTime);
     }

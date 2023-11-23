@@ -25,24 +25,34 @@ public class GameStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        objectiveTxt.text = "Objetivo Atual: " + objectiveCountry;
-        scoreTxt.text = "Pontuação: " + score;
-        streakTxt.text = "Sequência de Acertos: " + streak;
+        objectiveTxt.text = "Objective: " + objectiveCountry;
+        scoreTxt.text = "Score: " + score;
+        streakTxt.text = "Streak: " + streak;
 
         //disable correctTxt and wrongTxt
         correctTxt.enabled = false;
         wrongTxt.enabled = false;
     }
 
+    private void Update()
+    {
+        if ((correctTxt.enabled || wrongTxt.enabled) && Time.time > timeToDissapear)
+        {
+            correctTxt.enabled = false;
+            wrongTxt.enabled = false;
+        }
+    }
+
+
     public void CorrectCountry()
     {
         score += 100 + 50*streak;
 
-        scoreTxt.text = "Pontuação: " + score;
+        scoreTxt.text = "Score: " + score;
 
         timeToDissapear = Time.time + textTimeOnScreen;
         correctTxt.enabled = true;
-        correctTxt.text = "Acertou! + " + (100 + 50 * streak) + " pontos";
+        correctTxt.text = "Correct! + " + (100 + 50 * streak) + " points";
 
 
         streak++;
@@ -51,7 +61,7 @@ public class GameStats : MonoBehaviour
         if (streak > maxStreak)
             maxStreak = streak;
 
-        streakTxt.text = "Sequência de Acertos: " + streak;
+        streakTxt.text = "Streak: " + streak;
     }
 
     public void WrongCountry()
@@ -63,12 +73,12 @@ public class GameStats : MonoBehaviour
         if (score < 0)
             score = 0;
 
-        scoreTxt.text = "Pontuação: " + score;
+        scoreTxt.text = "Score: " + score;
 
         timeToDissapear = Time.time + textTimeOnScreen;
         wrongTxt.enabled = true;
-        wrongTxt.text = "Errou! - 20 pontos";
-        streakTxt.text = "Sequência de Acertos: " + streak;
+        wrongTxt.text = "Wrong! - 20 points";
+        streakTxt.text = "Streak: " + streak;
     }
 
     public void SkipCountry()
@@ -80,26 +90,17 @@ public class GameStats : MonoBehaviour
         if (score < 0)
             score = 0;
 
-        scoreTxt.text = "Pontuação: " + score;
+        scoreTxt.text = "Score: " + score;
 
         timeToDissapear = Time.time + textTimeOnScreen;
         wrongTxt.enabled = true;
-        wrongTxt.text = "País Pulado! - 50 pontos";
-        streakTxt.text = "Sequência de Acertos: " + streak;
+        wrongTxt.text = "Skipped! - 50 points";
+        streakTxt.text = "Streak: " + streak;
     }
 
     public void NewObjective(string country)
     {
         objectiveCountry = country;
-        objectiveTxt.text = "Objetivo Atual: " + objectiveCountry;
-    }
-
-    private void Update()
-    {
-        if((correctTxt.enabled || wrongTxt.enabled) && Time.time > timeToDissapear)
-        {
-            correctTxt.enabled = false;
-            wrongTxt.enabled = false;
-        }
+        objectiveTxt.text = "Objective: " + objectiveCountry;
     }
 }

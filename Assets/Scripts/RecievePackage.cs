@@ -38,10 +38,12 @@ public class RecievePackage : MonoBehaviour
         {
             FindAnyObjectByType<GameStats>().CorrectCountry();
             player.GetComponent<DropPackage>().GenNewObjective();
+            FindAnyObjectByType<AudioManager>().PlaySoundEffectCorrect();
         }
         else
         {
             FindAnyObjectByType<GameStats>().WrongCountry();
+            FindAnyObjectByType<AudioManager>().PlaySoundEffectWrong();
         }
 
         countriesCollided.Clear();

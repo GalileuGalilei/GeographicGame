@@ -23,6 +23,7 @@ public class CountryController : MonoBehaviour
         countryCollider.isTrigger = true;
         countryLine = GetComponent<LineRenderer>();
         countryLine.material.color = new Color(1, 1, 1, 0);
+        countryLine.enabled = false;
     } 
 
     //line renderer only visible if its colliding with player
@@ -44,23 +45,23 @@ public class CountryController : MonoBehaviour
 
     // fade function using coroutine
     IEnumerator FadeOut()
-    {
-        for (float f = 1f; f >= 0; f -= fadeSpeed)
-        {
-            Color c = countryLine.material.color;
-            c.a = f;
-            countryLine.material.color = c;
+    {   
+        for (float f = countryLine.material.GetFloat("_Alpha"); f >= 0; f -= fadeSpeed)
+        { 
+            countryLine.material.SetFloat("_Alpha", f);
             yield return new WaitForSeconds(fadeSpeed);
         }
+
+        countryLine.enabled = false;
     }
 
     IEnumerator FadeIn()
     {
-        for (float f = 0f; f <= 1; f += fadeSpeed)
+        countryLine.enabled = true;
+
+        for (float f = countryLine.material.GetFloat("_Alpha"); f <= 1; f += fadeSpeed)
         {
-            Color c = countryLine.material.color;
-            c.a = f;
-            countryLine.material.color = c;
+            countryLine.material.SetFloat("_Alpha", f);
             yield return new WaitForSeconds(fadeSpeed);
         }
     }

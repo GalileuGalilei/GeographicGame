@@ -54,7 +54,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 531838adba90e4f53bc759374801d9ac, type: 2}
+  - {fileID: 2100000, guid: 80f697f5904c3214bbcbb57c65b5146f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,3 +150,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4575cba1c38d8c84697cafca4cf62206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dynamicCollision: 0
+  fadeSpeed: 0.01

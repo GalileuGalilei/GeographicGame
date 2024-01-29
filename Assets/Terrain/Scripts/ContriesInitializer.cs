@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Linq;
+using UnityEngine.UI;
+using UnityEditor;
 
 namespace Assets.Terrain
 {
@@ -15,7 +17,6 @@ namespace Assets.Terrain
         }
 
         Country[] countries;
-        LineRenderer lines;
 
         [SerializeField]
         private string shapePath;
@@ -28,7 +29,7 @@ namespace Assets.Terrain
 
         void Awake()
         {
-            string json = System.IO.File.ReadAllText(shapePath);
+            string json = Resources.Load(shapePath).ToString();
             JsonCountries jsonContries = JsonConvert.DeserializeObject<JsonCountries>(json);
             countries = new Country[jsonContries.features.Count];
             JsonToVector(jsonContries);

@@ -1,11 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CountryController : MonoBehaviour
 {
-    private Transform parent;
-    private GameObject player;
     private Material countryMaterial;
     private LineRenderer countryLine;
     private BoxCollider countryCollider;
@@ -18,10 +15,11 @@ public class CountryController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
+        countryMaterial = Resources.Load<Material>("CountryMaterial");
         countryCollider = GetComponent<BoxCollider>();
         countryCollider.isTrigger = true;
         countryLine = GetComponent<LineRenderer>();
+        countryLine.material = countryMaterial;
         countryLine.material.color = new Color(1, 1, 1, 0);
         countryLine.enabled = false;
     } 
@@ -29,7 +27,7 @@ public class CountryController : MonoBehaviour
     //line renderer only visible if its colliding with player
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             StartCoroutine(FadeIn());
         }
@@ -37,7 +35,7 @@ public class CountryController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             StartCoroutine(FadeOut());
         }

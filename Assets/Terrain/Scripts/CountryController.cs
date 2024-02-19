@@ -62,5 +62,6 @@ public class CountryController : MonoBehaviour
             countryLine.material.SetFloat("_Alpha", f);
             yield return new WaitForSeconds(fadeSpeed);
         }
+
     }
 }

@@ -7,7 +7,12 @@ Shader "Unlit/CountryShader"
     SubShader
     {
         //write an transparent unlit shader 
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+		
+		Blend SrcAlpha OneMinusSrcAlpha
+		ZTest LEqual
+		ZWrite true
+		//shadows Off 
+		Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 		GrabPass { "_GrabTexture" }
         LOD 100
         

@@ -10,13 +10,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float turboRotationSpeed = 200f;
 
     private Vector3 speed;
-    private Vector3 rotation;
+    private float rotation;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.up);
+    }
 
     // Update is called once per frame
     void Update()
     {
         speed = Vector3.zero;
-        rotation = Vector3.zero;
+        rotation = 0;
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -30,12 +36,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            rotation -= transform.up * rotationSpeed;
+            rotation = -Time.deltaTime * rotationSpeed;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            rotation += transform.up * rotationSpeed;
+            rotation = Time.deltaTime * rotationSpeed;
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -50,9 +56,9 @@ public class PlayerController : MonoBehaviour
             FindAnyObjectByType<DropPackage>().GenNewObjective();
             FindAnyObjectByType<AudioManager>().PlaySoundEffectWrong();
         }
-
+        
         transform.Translate(speed * Time.deltaTime, Space.World);
-        transform.Rotate(rotation * Time.deltaTime);
+        transform.RotateAround(transform.position, transform.up, rotation);
     }
 
     

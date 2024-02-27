@@ -13,7 +13,16 @@ public class GameStats : MonoBehaviour
     private int wrongAnswers = 0;
     private string objectiveCountry = "NA";
 
-    [SerializeField] private float textTimeOnScreen = 3f;
+    [SerializeField]
+    private float textTimeOnScreen = 3f;
+    [SerializeField]
+    private ScoreboardDB scoreboardDB;
+    [SerializeField]
+    private FlagDisplayer flagDisplayer;
+    [SerializeField]
+    private PlayerController player;
+
+
     private float timeToDissapear = 0f;
 
     public TMP_Text scoreTxt;
@@ -25,13 +34,24 @@ public class GameStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        objectiveTxt.text = "Objective: " + objectiveCountry;
+        scoreboardDB = FindAnyObjectByType<ScoreboardDB>();
+
+        if(scoreboardDB.PlayerMode == "Clas")
+        {
+            flagDisplayer.gameObject.SetActive(false);
+        }
+        else
+        {
+            objectiveTxt.gameObject.SetActive(false);
+        }
+
         scoreTxt.text = "Score: " + score;
         streakTxt.text = "Streak: " + streak;
 
         //disable correctTxt and wrongTxt
         correctTxt.enabled = false;
         wrongTxt.enabled = false;
+
     }
 
     private void Update()
@@ -59,7 +79,10 @@ public class GameStats : MonoBehaviour
         correctAnswers++;
 
         if (streak > maxStreak)
+        {
             maxStreak = streak;
+            StartCoroutine(scoreboardDB.PostScoreAsync(maxStreak));
+        }
 
         streakTxt.text = "Streak: " + streak;
     }
@@ -98,9 +121,22 @@ public class GameStats : MonoBehaviour
         streakTxt.text = "Streak: " + streak;
     }
 
-    public void NewObjective(string country)
-    {
-        objectiveCountry = country;
-        objectiveTxt.text = "Objective: " + objectiveCountry;
+    public void NewObjective(string countryName, string countryCode)
+    { 
+        if(scoreboardDB == null)
+        {
+            scoreboardDB = FindAnyObjectByType<ScoreboardDB>();
+        }
+
+        player.GetComponent<DropPackage>().objectiveCountry = countryName;
+
+        if (scoreboardDB.PlayerMode == "Clas")
+        {
+            objectiveTxt.text = "Objective: " + countryName;
+        }
+        else
+        {
+            flagDisplayer.UpdateFlag(countryCode);
+        }
     }
 }

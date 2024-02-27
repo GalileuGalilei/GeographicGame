@@ -10,13 +10,14 @@ namespace Assets.Terrain
 {
     public class ContriesInitializer : MonoBehaviour
     {
-        internal struct Country
+        public struct Country
         {
             public string name;
+            public string country_code;
             public List<List<Vector2>> polygons;
         }
 
-        Country[] countries;
+        public Country[] countries;
 
         [SerializeField]
         private string shapePath;
@@ -29,6 +30,7 @@ namespace Assets.Terrain
 
         void Awake()
         {
+
             string json = Resources.Load(shapePath).ToString();
             JsonCountries jsonContries = JsonConvert.DeserializeObject<JsonCountries>(json);
             countries = new Country[jsonContries.features.Count];
@@ -50,6 +52,7 @@ namespace Assets.Terrain
             for (int i = 0; i < jsonCountries.features.Count; i++)
             {
                 countries[i].name = jsonCountries.features[i].properties.NAME_LONG;
+                countries[i].country_code = jsonCountries.features[i].properties.ISO_A2;
                 countries[i].polygons = new List<List<Vector2>>();
 
                 foreach (List<List<double[]>> polygons in jsonCountries.features[i].geometry.coordinates)
@@ -108,6 +111,9 @@ namespace Assets.Terrain
             float lonRad = coordinate.x * Mathf.Deg2Rad;
             float latRad = coordinate.y * Mathf.Deg2Rad;
 
+            //flip the x axis
+            lonRad = -lonRad;
+            
             // Calculate x, y, z coordinates in world space
             float x = origin.x + radius * Mathf.Cos(latRad) * Mathf.Cos(lonRad);
             float y = origin.y + radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad);

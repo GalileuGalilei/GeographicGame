@@ -2,24 +2,25 @@
 
 namespace Assets.Terrain
 {
-    public struct Geometry
+    internal struct Geometry
     {
         public string type;
         public List<List<List<double[]>>> coordinates;
     }
 
-    public struct Properties
+    internal struct Properties
     {
         public string NAME_LONG;
+        public string ISO_A2;
     }
 
-    public struct Country
+    internal struct Country
     {
         public Properties properties;
         public Geometry geometry;
     }
 
-    public struct JsonCountries
+    internal struct JsonCountries
     {
         public List<Country> features;
     }

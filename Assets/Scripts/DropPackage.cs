@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using Assets.Terrain;
 
 public class DropPackage : MonoBehaviour
 {
@@ -11,14 +12,12 @@ public class DropPackage : MonoBehaviour
     [SerializeField] private Transform playerModel;
     [SerializeField] private float dropCooldown = 3f;
     private float lastDropTime = 0f;
-    private string[] countries;
     public string objectiveCountry;
+    ContriesInitializer.Country[] countries;
 
     private void Start()
     {
-        Assets.Terrain.ContriesInitializer countries_initializer = countriesController.GetComponent<Assets.Terrain.ContriesInitializer>();
-        countries = countries_initializer.GetCountryNames();
-      
+        countries = countriesController.GetComponent<ContriesInitializer>().countries;
         GenNewObjective();
     }
 
@@ -38,8 +37,9 @@ public class DropPackage : MonoBehaviour
     {
         var random = new System.Random();
         int index = random.Next(countries.Length);
-        objectiveCountry = countries[index];
-        FindAnyObjectByType<GameStats>().NewObjective(objectiveCountry);
+        var country = countries[index]; 
+        
+        FindAnyObjectByType<GameStats>().NewObjective(country.name, country.country_code);
     }
 
     void InstantiatePrefab()

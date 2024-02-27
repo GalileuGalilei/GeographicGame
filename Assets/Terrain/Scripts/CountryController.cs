@@ -7,14 +7,18 @@ public class CountryController : MonoBehaviour
     private LineRenderer countryLine;
     private BoxCollider countryCollider;
 
-    [SerializeField]
-    private bool dynamicCollision = false;
+    private Vector3 originalPosition;
+    private Vector3 heighlightedPosition;
+
     [SerializeField]
     private float fadeSpeed = 0.01f;
 
     // Start is called before the first frame update
     void Start()
     {
+        originalPosition = transform.position;
+        heighlightedPosition = originalPosition + transform.up * 0.04f;
+
         countryMaterial = Resources.Load<Material>("CountryMaterial");
         countryCollider = GetComponent<BoxCollider>();
         countryCollider.isTrigger = true;
@@ -46,6 +50,7 @@ public class CountryController : MonoBehaviour
     {   
         for (float f = countryLine.material.GetFloat("_Alpha"); f >= 0; f -= fadeSpeed)
         { 
+            transform.position = Vector3.Lerp(heighlightedPosition, originalPosition, f);
             countryLine.material.SetFloat("_Alpha", f);
             yield return new WaitForSeconds(fadeSpeed);
         }
@@ -59,6 +64,7 @@ public class CountryController : MonoBehaviour
 
         for (float f = countryLine.material.GetFloat("_Alpha"); f <= 1; f += fadeSpeed)
         {
+            transform.position = Vector3.Lerp(originalPosition, heighlightedPosition, f);
             countryLine.material.SetFloat("_Alpha", f);
             yield return new WaitForSeconds(fadeSpeed);
         }
